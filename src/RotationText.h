@@ -16,11 +16,12 @@
 #pragma once
 #include "ofxTrueTypeFontUC.h"
 #include "ofMain.h"
+#include "SingleChar.hpp"
 
-static const float kMultiStepAngle = 4.6;     // マルチバイト
-static const float kNum2MultiStepAngle = 3.0; // 半角英数字 -> マルチバイト
-static const float kNumStepAngle = 2.8;       // 半角英数字
-static const float kMulti2NumStepAngle = 5.8; // マルチバイト -> 半角英数字
+static const float kMultiStepAngle = 8.6;     // マルチバイト
+static const float kNum2MultiStepAngle = 7.0; // 半角英数字 -> マルチバイト
+static const float kNumStepAngle = 5.6;       // 半角英数字
+static const float kMulti2NumStepAngle = 8.6; // マルチバイト -> 半角英数字
 static const float kRotationSpeed = 0.5;
 static const float kRadius = 300.0;
 static const int kCharBytes = 3;
@@ -39,6 +40,7 @@ class RotationText {
         void setup(string text);
         void update();
         void draw();
+        void addChars(string text);
     
     ofxTrueTypeFontUC myFont;
     string sampleString;
@@ -46,5 +48,7 @@ class RotationText {
     
     TextSpeechMode textSpeechMode;
     vector<string> analyzedList;
-    bool showLines;    
+    bool showLines;
+    
+    vector<SingleChar *> chars;
 };
