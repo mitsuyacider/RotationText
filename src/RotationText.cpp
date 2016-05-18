@@ -8,16 +8,29 @@
 
 #include "RotationText.h"
 
+RotationText::RotationText(FieldType type) {
+    myFont.loadFont("Meiryo.ttf", kFontSize, true, true);
+    textSpeechMode = TextSpeechModeReady;
+    
+    if (type == FieldTypeA) {
+        startAngle = 90 + kMarginAngle;
+        endAngle = 270 - kMarginAngle;
+    } else if (type == FieldTypeB) {
+        startAngle = 270 + kMarginAngle;
+        endAngle = 450 - kMarginAngle;
+    }
+}
+
+RotationText::~RotationText() {
+    
+}
 
 void RotationText::setup(string text) {
-    myFont.loadFont("Meiryo.ttf", 20, true, true);
-    myFont.setSpaceSize(10);
     sampleString = text;
 
     analyzedList.push_back("あいうえお");
     analyzedList.push_back("かきくけこ");
     speed = 1;
-    textSpeechMode = TextSpeechModeSpeaking;
 
     showLines = false;
     
@@ -27,30 +40,54 @@ void RotationText::setup(string text) {
 }
 
 void RotationText::update() {
-    // MEMO: autoは型推論らしい
-    for(auto itr = chars.begin(); itr != chars.end(); ++itr) {
-        (*itr)->update();
+    
+    if (!charsQue.empty()) {
+        // MEMO: autoは型推論らしい
+        for(auto itr = charsQue.begin(); itr != charsQue.end(); ++itr) {
+            (*itr)->update();
+        }
+    }
+    
+    // erase char
+    std::deque<SingleChar *>::iterator it = charsQue.begin();
+    while(it != charsQue.end()){
+        SingleChar *c = *it;
+        if (c->angle > endAngle) {
+                it = charsQue.erase(it);
+            delete c;
+        } else {
+            ++it;
+        }
+    }
+    
+    if (charsQue.empty()) {
+        textSpeechMode = TextSpeechModeReady;
     }
 }
 
 void RotationText::draw() {
-    for(auto itr = chars.begin(); itr != chars.end(); ++itr) {
-        ofPushMatrix();
-        ofTranslate(ofGetWidth() / 2,  ofGetHeight() / 2);
-        ofRotate((*itr)->angle);
-        ofPushMatrix();
-        ofTranslate(kRadius, 0);
-        ofRotate(-90);
-        
-        ofPushStyle();
-        ofSetColor((*itr)->color);
-        myFont.drawString((*itr)->aChar, 0, 0);
-        ofPopStyle();
-        ofPopMatrix();
-        ofPopMatrix();
+    if (!charsQue.empty())  {
+        for(auto itr = charsQue.begin(); itr != charsQue.end(); ++itr) {
+            ofPushMatrix();
+            ofTranslate(ofGetWidth() / 2,  ofGetHeight() / 2);
+            ofRotate((*itr)->angle);
+            ofPushMatrix();
+            ofTranslate(kRadius, 0);
+            ofRotate(-90);
+            
+            ofPushStyle();
+            if ((*itr)->angle > startAngle && (*itr)->angle < endAngle) {
+                ofSetColor(255);
+            } else {
+                ofSetColor(0);
+            }
+            myFont.drawString((*itr)->aChar, 0, 0);
+            ofPopStyle();
+            ofPopMatrix();
+            ofPopMatrix();
+        }
     }
 }
-
 
 void RotationText::addChars(string text) {
     string tempStr = text;
@@ -60,11 +97,11 @@ void RotationText::addChars(string text) {
     int oldBytes = 1;
     
     float currentAngle = 0.0;
-    if (chars.empty()) {
+    if (charsQue.empty()) {
         // NOTE: A領域, B領域で、現在描画できる領域をみる必要がある。
-        currentAngle = 90.0;
+        currentAngle = startAngle;
     } else {
-        SingleChar *lastChar = chars.back();
+        SingleChar *lastChar = charsQue.back();
         bool hasNum = isalnum(*lastChar->aChar.c_str());
         oldBytes = hasNum ? 1 : 3;
         currentAngle = lastChar->angle;
@@ -91,9 +128,11 @@ void RotationText::addChars(string text) {
         }
         
         SingleChar *char1 = new SingleChar(currentAngle, str);
-        chars.push_back(char1);
+        charsQue.push_back(char1);
         
         tempStr.erase(0, bytes);
         oldBytes = bytes;
     }
+    
+    textSpeechMode = TextSpeechModeSpeaking;
 }

@@ -4,44 +4,58 @@
 void ofApp::setup(){
     ofBackground(0);
     text = "あいうえおabsあksldfじゅおい";
-    rotText.setup(text);
-
-//    printf("\n text = %s", rotText.sampleString.c_str());
-//    rotText.sampleString.erase(0, 3);
-//    printf("\n text = %s", rotText.sampleString.c_str());
-    
-    
-    //空白を削除する場合
-    string testString = " a b c あ ";
-    for(size_t c = testString.find_first_of(" "); c != string::npos; c = c = testString.find_first_of(" ")){
-        testString.erase(c,1);
-    }
-    printf("\n%s\n",testString.c_str());
-    
-    //空白とeを削除する場合
-    testString = " a eb c eあ ";
-    for(size_t c = testString.find_first_of(" e"); c != string::npos; c = c = testString.find_first_of(" e")){
-        testString.erase(c,1);
-    }
-    printf("\n%s\n",testString.c_str());
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    rotText.update();
+    rotManager.update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    rotText.draw();
+    rotManager.draw();
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-    std::ostringstream sout;
-    sout << key;
-    text += sout.str();
-    rotText.sampleString = text;
+    string s;
+    bool newText = false;
+    switch (key) {
+        case '1':
+            s = "ああsfじ";
+            break;
+            
+        case '2':
+            s = "かっくいかsdふぉ";
+            break;
+            
+        case '3':
+            s = "さしすせふぉ";
+            break;
+            
+        case 's':
+            rotManager.refresh();
+            newText = true;
+            s = "newText";
+            break;
+            
+        default:
+            std::ostringstream sout;
+            sout << key;
+            s = sout.str();
+            break;
+    }
+    
+    if(newText) {
+        if (rotManager.canAddNewText()) {
+            rotManager.addText(s);
+        } else {
+            printf("\ncan not insert");
+        }
+        
+    } else {
+        rotManager.addText(s);
+    }
 }
 
 //--------------------------------------------------------------

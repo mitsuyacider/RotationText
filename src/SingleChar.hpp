@@ -14,8 +14,6 @@
 #include "ofxTrueTypeFontUC.h"
 #include "ofMain.h"
 
-static const int kFontSize = 10;
-
 class SingleChar {
     
     public:
