@@ -35,7 +35,7 @@ void RotationText::setup(string text) {
     showLines = false;
     
     // Stringの配列を作成する
-    sampleString = "あいうえおかきうけこあskファおph";
+    sampleString = "今日はいい天気でした。明日はいいスケジュールで進めるといいですね。";
     addChars(sampleString);
 }
 
@@ -77,9 +77,9 @@ void RotationText::draw() {
             
             ofPushStyle();
             if ((*itr)->angle > startAngle && (*itr)->angle < endAngle) {
-                ofSetColor(255);
+                ofSetColor((*itr)->color);
             } else {
-                ofSetColor(0);
+                ofSetColor(0, 0);
             }
             myFont.drawString((*itr)->aChar, 0, 0);
             ofPopStyle();
@@ -135,4 +135,54 @@ void RotationText::addChars(string text) {
     }
     
     textSpeechMode = TextSpeechModeSpeaking;
+}
+
+string RotationText::getCurrentText() {
+    string result = "";
+    
+    for(auto itr = charsQue.begin(); itr != charsQue.end(); ++itr) {
+        result += (*itr)->aChar;
+    }
+    return result;
+}
+
+std::vector<int> RotationText::search( std::string const & text, std::regex const & re ) {
+    std::vector<int> result ;
+    
+    std::sregex_iterator iter( text.cbegin(), text.cend(), re ) ;
+    std::sregex_iterator end ;
+    
+    for ( ; iter != end ; ++iter ) {
+        for (int i = iter->position(); i < iter->length() + iter->position(); i++) {
+            result.push_back(i);
+        }
+    }
+    
+    return result;
+}
+
+void RotationText::changeColor(TextSpeechMode mode) {
+    textSpeechMode = mode;
+    
+    // 色を変更する
+    if (mode == TextSpeechModeAnalyzed) {
+        string tempStr = getCurrentText();
+        //        vector colorPos =
+        std::regex re( "明日|天気|スケジュール" ) ;
+        std::string text(tempStr);
+        vector <int> colorPos = search( text, re ) ;
+        int bytes = 0;
+        for(auto itr = charsQue.begin(); itr != charsQue.end(); ++itr) {
+            vector<int>::iterator cIter = find( colorPos.begin(),colorPos.end(), bytes);
+            
+            if( cIter != colorPos.end() ){
+                (*itr)->color = ofColor(255, 0, 0);
+            } else {
+                (*itr)->color = ofColor(120);
+            }
+            bytes += (*itr)->bytes;
+        }
+        
+        for (auto & elem : colorPos) printf("\n%d", elem);
+    }
 }

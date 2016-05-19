@@ -12,8 +12,12 @@ SingleChar::SingleChar(float firstAngle, string txt) {
     aChar = txt;
     angle = firstAngle;
     radius = 200.0;
-    speed = 0.5;
+    speed = 0.2;
     color = ofColor(255);
+    
+    bool hasNum = isalnum(*txt.substr(0, 1).c_str());    
+    bytes = hasNum ? 1 : 3;
+    
 }
 
 SingleChar::~SingleChar() {}

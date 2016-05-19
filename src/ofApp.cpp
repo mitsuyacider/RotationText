@@ -4,6 +4,9 @@
 void ofApp::setup(){
     ofBackground(0);
     text = "あいうえおabsあksldfじゅおい";
+    
+    
+    
 }
 
 //--------------------------------------------------------------
@@ -22,7 +25,7 @@ void ofApp::keyPressed(int key){
     bool newText = false;
     switch (key) {
         case '1':
-            s = "ああsfじ";
+            s = "今日はいい天気でした。明日はいいスケジュールで進めるといいですね。";
             break;
             
         case '2':
@@ -38,7 +41,16 @@ void ofApp::keyPressed(int key){
             newText = true;
             s = "newText";
             break;
+        
+        case'a':
+            break;
             
+        case'b': {
+            string s[] = {"明日", "天気"};
+            rotManager.analyzed(s);
+        }
+            break;
+
         default:
             std::ostringstream sout;
             sout << key;

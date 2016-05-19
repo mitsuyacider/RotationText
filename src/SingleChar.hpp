@@ -29,6 +29,7 @@ class SingleChar {
         float radius;
         ofColor color;
         float deadAngle;
+        int bytes;
 };
 
 #endif /* SingleChar_hpp */

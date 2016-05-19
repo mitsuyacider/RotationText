@@ -17,6 +17,8 @@
 #include "ofxTrueTypeFontUC.h"
 #include "ofMain.h"
 #include "SingleChar.hpp"
+#include <regex>
+
 
 static const float kMultiStepAngle = 4.6;     // マルチバイト
 static const float kNum2MultiStepAngle = 3.0; // 半角英数字 -> マルチバイト
@@ -50,8 +52,15 @@ class RotationText {
     void setup(string text);
     void update();
     void draw();
+    // 文字列を追加する
     void addChars(string text);
-    
+    // 現在表示されているテキストを取得する
+    string getCurrentText();
+    // 正規表現でマッチングしたテキスト情報を取得する
+    std::vector<int> search( std::string const & text, std::regex const & re );
+    // 文字色を変更する
+    void changeColor(TextSpeechMode mode);
+
     ofxTrueTypeFontUC myFont;
     string sampleString;
     float speed;

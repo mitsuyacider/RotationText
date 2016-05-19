@@ -25,7 +25,7 @@ public:
     void refresh();
     // 新規テキストが挿入できるかどうかを調べる
     bool canAddNewText();
-    
+    void analyzed(string text[]);
     vector<RotationText *>rotTextQue;
 };
 
