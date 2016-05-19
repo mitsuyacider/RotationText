@@ -28,22 +28,36 @@ RotationText::~RotationText() {
 void RotationText::setup(string text) {
     sampleString = text;
 
-    analyzedList.push_back("あいうえお");
-    analyzedList.push_back("かきくけこ");
+    analyzedList.push_back("„ÅÇ„ÅÑ„ÅÜ„Åà„Åä");
+    analyzedList.push_back("„Åã„Åç„Åè„Åë„Åì");
     speed = 1;
 
     showLines = false;
     
-    // Stringの配列を作成する
-    sampleString = "今日はいい天気でした。明日はいいスケジュールで進めるといいですね。";
+    // String„ÅÆÈÖçÂàó„Çí‰ΩúÊàê„Åô„Çã
+    sampleString = "‰ªäÊó•„ÅØ„ÅÑ„ÅÑÂ§©Ê∞ó„Åß„Åó„Åü„ÄÇÊòéÊó•„ÅØ„ÅÑ„ÅÑ„Çπ„Ç±„Ç∏„É•„Éº„É´„ÅßÈÄ≤„ÇÅ„Çã„Å®„ÅÑ„ÅÑ„Åß„Åô„Å≠„ÄÇ";
     addChars(sampleString);
 }
 
 void RotationText::update() {
     
     if (!charsQue.empty()) {
-        // MEMO: autoは型推論らしい
+        // MEMO: auto„ÅØÂûãÊé®Ë´ñ„Çâ„Åó„ÅÑ
+        float lastAngle = 0.0;
         for(auto itr = charsQue.begin(); itr != charsQue.end(); ++itr) {
+            if (textSpeechMode == TextSpeechModeAnalyzed) {
+                // NOTE: add force
+                if (itr!= charsQue.begin()) {
+                    if ((*itr)->bAnalyzed) {
+                        // 前回のangleとの開きがあった場合、speedを追加する
+                        
+                        
+                        lastAngle = (*itr)->angle;
+                    }
+                } else {
+                    lastAngle = (*itr)->angle;
+                }
+            }
             (*itr)->update();
         }
     }
@@ -98,7 +112,7 @@ void RotationText::addChars(string text) {
     
     float currentAngle = 0.0;
     if (charsQue.empty()) {
-        // NOTE: A領域, B領域で、現在描画できる領域をみる必要がある。
+        // NOTE: AÈ†òÂüü, BÈ†òÂüü„Åß„ÄÅÁèæÂú®ÊèèÁîª„Åß„Åç„ÇãÈ†òÂüü„Çí„Åø„ÇãÂøÖË¶Å„Åå„ÅÇ„Çã„ÄÇ
         currentAngle = startAngle;
     } else {
         SingleChar *lastChar = charsQue.back();
@@ -108,19 +122,19 @@ void RotationText::addChars(string text) {
     }
     
     while(!tempStr.empty()) {
-        // ÂçäËßíËã±Êï∞Â≠ó„Åã„Å©„ÅÜ„Åã„ÇíÂà§Âà•„Åô„Çã
+        // √Ç√ß√§√ã√ü√≠√ã√£¬±√ä√Ø‚àû√Ç‚â†√≥‚Äû√Ö√£‚Äû√Ö¬©‚Äû√Ö√ú‚Äû√Ö√£‚Äû√á√≠√Ç√†¬ß√Ç√†‚Ä¢‚Äû√Ö√¥‚Äû√á√£
         bool hasNum = isalnum(*tempStr.substr(0, 1).c_str());
         
         bytes = hasNum ? 1 : 3;
         str = tempStr.substr(0, bytes);
         
-        // NOTE: 半角英数字とマルチバイト文字の変わり目にスペースが空きすぎてしまうため、
-        //       頭とお尻のスペースを調整する必要がある。
+        // NOTE: ÂçäËßíËã±Êï∞Â≠ó„Å®„Éû„É´„ÉÅ„Éê„Ç§„ÉàÊñáÂ≠ó„ÅÆÂ§â„Çè„ÇäÁõÆ„Å´„Çπ„Éö„Éº„Çπ„ÅåÁ©∫„Åç„Åô„Åé„Å¶„Åó„Åæ„ÅÜ„Åü„ÇÅ„ÄÅ
+        //       È†≠„Å®„ÅäÂ∞ª„ÅÆ„Çπ„Éö„Éº„Çπ„ÇíË™øÊï¥„Åô„ÇãÂøÖË¶Å„Åå„ÅÇ„Çã„ÄÇ
         if (oldBytes == 3 && bytes == 1) {
-            // 前回の文字がマルチバイトの場合 (マルチバイト -> 半角英数字)
+            // ÂâçÂõû„ÅÆÊñáÂ≠ó„Åå„Éû„É´„ÉÅ„Éê„Ç§„Éà„ÅÆÂ†¥Âêà („Éû„É´„ÉÅ„Éê„Ç§„Éà -> ÂçäËßíËã±Êï∞Â≠ó)
             currentAngle -= kMulti2NumStepAngle;
         } else if (oldBytes == 1 && bytes == 3) {
-            // 前回の文字が半角英数字の場合 (半角英数字 -> マルチバイト)
+            // ÂâçÂõû„ÅÆÊñáÂ≠ó„ÅåÂçäËßíËã±Êï∞Â≠ó„ÅÆÂ†¥Âêà (ÂçäËßíËã±Êï∞Â≠ó -> „Éû„É´„ÉÅ„Éê„Ç§„Éà)
             currentAngle -= kNum2MultiStepAngle;
         } else {
             float angle = hasNum ? kNumStepAngle : kMultiStepAngle;
@@ -164,7 +178,7 @@ std::vector<int> RotationText::search( std::string const & text, std::regex cons
 void RotationText::changeColor(TextSpeechMode mode) {
     textSpeechMode = mode;
     
-    // 色を変更する
+    // Ëâ≤„ÇíÂ§âÊõ¥„Åô„Çã
     if (mode == TextSpeechModeAnalyzed) {
         string tempStr = getCurrentText();
         //        vector colorPos =
@@ -177,8 +191,10 @@ void RotationText::changeColor(TextSpeechMode mode) {
             
             if( cIter != colorPos.end() ){
                 (*itr)->changeColor(kAnalyzedHilightColor);
+                (*itr)->bAnalyzed = true;
             } else {
                 (*itr)->changeColor(kAnalyzedDisableColor);
+                (*itr)->bAnalyzed = false;
             }
             bytes += (*itr)->bytes;
         }
@@ -186,7 +202,7 @@ void RotationText::changeColor(TextSpeechMode mode) {
 }
 
 void RotationText::analyzed(string text[]) {
-    analyzedString = "明日|天気";
+    analyzedString = "ÊòéÊó•|Â§©Ê∞ó";
 //    for (int i = 0; i < text->size(); i++) {
 //        analyzedString += text[i];
 //        if (i != text->size() - 1) analyzedString += "|";

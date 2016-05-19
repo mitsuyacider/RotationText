@@ -23,7 +23,7 @@ SingleChar::~SingleChar() {}
 void SingleChar::update() {
     angle += speed;
     if (!rTween.isCompleted()) {
-        color = ofColor(rTween.update(), gTween.update(), bTween.update());
+        color = ofColor(rTween.update(), gTween.update(), bTween.update(), aTween.update());
     }
 }
 

@@ -38,6 +38,7 @@ class SingleChar {
         ofxTween bTween;
         ofxTween aTween;
         ofxEasingQuart 	easingquart;
+        bool bAnalyzed;
 };
 
 #endif /* SingleChar_hpp */
