@@ -58,5 +58,6 @@ bool RotationTextManager::canAddNewText() {
 
 void RotationTextManager::analyzed(string text[]) {
     RotationText *rotT = rotTextQue.front();
-    rotT->changeColor(TextSpeechModeAnalyzed);
+    rotT->analyzed(text);
+//    rotT->changeColor(TextSpeechModeAnalyzed);
 }

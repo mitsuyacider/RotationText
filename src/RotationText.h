@@ -29,6 +29,8 @@ static const float kRadius = 300.0;
 static const int kCharBytes = 3;
 static const int kFontSize = 20;
 static const int kMarginAngle = 30;
+static const ofColor kAnalyzedHilightColor = ofColor(255, 0, 0); // 形態素解析された文字の色
+static const ofColor kAnalyzedDisableColor = ofColor(); // 形態素解析されてない文字の色
 
 typedef enum {
     
@@ -60,7 +62,8 @@ class RotationText {
     std::vector<int> search( std::string const & text, std::regex const & re );
     // 文字色を変更する
     void changeColor(TextSpeechMode mode);
-
+    void analyzed(string text[]);
+    
     ofxTrueTypeFontUC myFont;
     string sampleString;
     float speed;
@@ -71,4 +74,5 @@ class RotationText {
     std::deque<SingleChar *> charsQue;
     float startAngle;
     float endAngle;
+    string analyzedString;
 };

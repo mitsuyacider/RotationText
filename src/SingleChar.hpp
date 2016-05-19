@@ -13,6 +13,7 @@
 #pragma once
 #include "ofxTrueTypeFontUC.h"
 #include "ofMain.h"
+#include "ofxTween.h"
 
 class SingleChar {
     
@@ -21,6 +22,7 @@ class SingleChar {
         ~SingleChar();
         void update();
         void draw();
+        void changeColor(ofColor c);
     
         ofxTrueTypeFontUC myFont;
         string aChar;
@@ -30,6 +32,12 @@ class SingleChar {
         ofColor color;
         float deadAngle;
         int bytes;
+    
+        ofxTween rTween;
+        ofxTween gTween;
+        ofxTween bTween;
+        ofxTween aTween;
+        ofxEasingQuart 	easingquart;
 };
 
 #endif /* SingleChar_hpp */

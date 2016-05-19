@@ -168,7 +168,7 @@ void RotationText::changeColor(TextSpeechMode mode) {
     if (mode == TextSpeechModeAnalyzed) {
         string tempStr = getCurrentText();
         //        vector colorPos =
-        std::regex re( "明日|天気|スケジュール" ) ;
+        std::regex re(analyzedString) ;
         std::string text(tempStr);
         vector <int> colorPos = search( text, re ) ;
         int bytes = 0;
@@ -176,13 +176,21 @@ void RotationText::changeColor(TextSpeechMode mode) {
             vector<int>::iterator cIter = find( colorPos.begin(),colorPos.end(), bytes);
             
             if( cIter != colorPos.end() ){
-                (*itr)->color = ofColor(255, 0, 0);
+                (*itr)->changeColor(kAnalyzedHilightColor);
             } else {
-                (*itr)->color = ofColor(120);
+                (*itr)->changeColor(kAnalyzedDisableColor);
             }
             bytes += (*itr)->bytes;
         }
-        
-        for (auto & elem : colorPos) printf("\n%d", elem);
     }
+}
+
+void RotationText::analyzed(string text[]) {
+    analyzedString = "明日|天気";
+//    for (int i = 0; i < text->size(); i++) {
+//        analyzedString += text[i];
+//        if (i != text->size() - 1) analyzedString += "|";
+//    }
+    
+    changeColor(TextSpeechModeAnalyzed);
 }
