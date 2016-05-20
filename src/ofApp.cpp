@@ -23,6 +23,7 @@ void ofApp::draw(){
 void ofApp::keyPressed(int key){
     string s;
     bool newText = false;
+    bool analyzed = false;
     switch (key) {
         case '1':
             s = "明日は";
@@ -55,6 +56,7 @@ void ofApp::keyPressed(int key){
             break;
             
         case'b': {
+            analyzed = true;
             string s = "明日|晴れる|天気|スケジュール";
             rotManager.analyzed(s);
         }
@@ -67,15 +69,17 @@ void ofApp::keyPressed(int key){
             break;
     }
     
-    if(newText) {
-        if (rotManager.canAddNewText()) {
-            rotManager.addText(s);
+    if (!analyzed) {
+        if(newText) {
+            if (rotManager.canAddNewText()) {
+                rotManager.addText(s);
+            } else {
+                printf("\ncan not insert");
+            }
+            
         } else {
-            printf("\ncan not insert");
-        }
-        
-    } else {
-        rotManager.addText(s);
+            rotManager.addText(s);
+        }        
     }
 }
 

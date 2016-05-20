@@ -28,7 +28,7 @@ static const float kRotationSpeed = 0.5;
 static const float kRadius = 300.0;
 static const int kCharBytes = 3;
 static const int kFontSize = 20;
-static const int kMarginAngle = 30;
+static const int kMarginAngle = 10;
 static const ofColor kAnalyzedHilightColor = ofColor(255, 0, 0); // 形態素解析された文字の色
 static const ofColor kAnalyzedDisableColor = ofColor(120, 120); // 形態素解析されてない文字の色
 

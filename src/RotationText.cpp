@@ -87,9 +87,8 @@ void RotationText::draw() {
             ofPushStyle();
             if ((*itr)->angle > startAngle && (*itr)->angle < endAngle) {
                 ofSetColor((*itr)->color);
-            } else {
-//                ofSetColor(0, 0);
             }
+            
             myFont.drawString((*itr)->aChar, 0, 0);
             ofPopStyle();
             ofPopMatrix();
@@ -207,7 +206,7 @@ void RotationText::changeColor(TextSpeechMode mode) {
 }
 
 void RotationText::analyzed(string text) {
-    analyzedString = text;
+    analyzedString = utf8rev(text);
 //    for (int i = 0; i < text->size(); i++) {
 //        analyzedString += text[i];
 //        if (i != text->size() - 1) analyzedString += "|";
