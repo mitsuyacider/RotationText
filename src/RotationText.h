@@ -20,10 +20,10 @@
 #include <regex>
 
 
-static const float kMultiStepAngle = 4.6;     // マルチバイト
-static const float kNum2MultiStepAngle = 3.0; // 半角英数字 -> マルチバイト
+static const float kMultiStepAngle = 4.8;     // マルチバイト
+static const float kNum2MultiStepAngle = 5.8; // 半角英数字 -> マルチバイト
 static const float kNumStepAngle = 2.8;       // 半角英数字
-static const float kMulti2NumStepAngle = 5.8; // マルチバイト -> 半角英数字
+static const float kMulti2NumStepAngle = 5.0; // マルチバイト -> 半角英数字
 static const float kRotationSpeed = 0.5;
 static const float kRadius = 300.0;
 static const int kCharBytes = 3;
@@ -62,7 +62,8 @@ class RotationText {
     std::vector<int> search( std::string const & text, std::regex const & re );
     // 文字色を変更する
     void changeColor(TextSpeechMode mode);
-    void analyzed(string text[]);
+    void analyzed(string text);
+    std::string utf8rev(std::string str);
     
     ofxTrueTypeFontUC myFont;
     string sampleString;
@@ -74,5 +75,5 @@ class RotationText {
     std::deque<SingleChar *> charsQue;
     float startAngle;
     float endAngle;
-    string analyzedString;
+    string analyzedString;    
 };

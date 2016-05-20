@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofBackground(0);
-    text = "あいうえおabsあksldfじゅおい";
+    text = "„ÅÇ„ÅÑ„ÅÜ„Åà„Åäabs„ÅÇksldf„Åò„ÇÖ„Åä„ÅÑ";
     
     
     
@@ -25,16 +25,25 @@ void ofApp::keyPressed(int key){
     bool newText = false;
     switch (key) {
         case '1':
-            s = "今日はいい天気でした。明日はいいスケジュールで進めるといいですね。";
+            s = "明日は";
             break;
             
         case '2':
-            s = "かっくいかsdふぉ";
+            s = "明日はいい天気";
             break;
             
         case '3':
-            s = "さしすせふぉ";
+            s = "明日はいい天気になるといい";
             break;
+
+        case '4':
+            s = "明日はいい天気という";
+            break;
+
+        case '5':
+            s = "明日はいい天気になるといいな。スケジュールを確認してTokyoにでも遊びに行こう";
+            break;
+
             
         case 's':
             rotManager.refresh();
@@ -46,7 +55,7 @@ void ofApp::keyPressed(int key){
             break;
             
         case'b': {
-            string s[] = {"明日", "天気"};
+            string s = "明日|晴れる|天気|スケジュール";
             rotManager.analyzed(s);
         }
             break;

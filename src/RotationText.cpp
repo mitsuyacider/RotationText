@@ -19,6 +19,8 @@ RotationText::RotationText(FieldType type) {
         startAngle = 270 + kMarginAngle;
         endAngle = 450 - kMarginAngle;
     }
+    
+    showLines = true;
 }
 
 RotationText::~RotationText() {
@@ -32,7 +34,6 @@ void RotationText::setup(string text) {
     analyzedList.push_back("„Åã„Åç„Åè„Åë„Åì");
     speed = 1;
 
-    showLines = false;
     
     // String„ÅÆÈÖçÂàó„Çí‰ΩúÊàê„Åô„Çã
     sampleString = "‰ªäÊó•„ÅØ„ÅÑ„ÅÑÂ§©Ê∞ó„Åß„Åó„Åü„ÄÇÊòéÊó•„ÅØ„ÅÑ„ÅÑ„Çπ„Ç±„Ç∏„É•„Éº„É´„ÅßÈÄ≤„ÇÅ„Çã„Å®„ÅÑ„ÅÑ„Åß„Åô„Å≠„ÄÇ";
@@ -47,16 +48,7 @@ void RotationText::update() {
         for(auto itr = charsQue.begin(); itr != charsQue.end(); ++itr) {
             if (textSpeechMode == TextSpeechModeAnalyzed) {
                 // NOTE: add force
-                if (itr!= charsQue.begin()) {
-                    if ((*itr)->bAnalyzed) {
-                        // 前回のangleとの開きがあった場合、speedを追加する
-                        
-                        
-                        lastAngle = (*itr)->angle;
-                    }
-                } else {
-                    lastAngle = (*itr)->angle;
-                }
+                
             }
             (*itr)->update();
         }
@@ -77,6 +69,9 @@ void RotationText::update() {
     if (charsQue.empty()) {
         textSpeechMode = TextSpeechModeReady;
     }
+    
+    startAngle += 0.2;
+    endAngle += 0.2;
 }
 
 void RotationText::draw() {
@@ -93,7 +88,7 @@ void RotationText::draw() {
             if ((*itr)->angle > startAngle && (*itr)->angle < endAngle) {
                 ofSetColor((*itr)->color);
             } else {
-                ofSetColor(0, 0);
+//                ofSetColor(0, 0);
             }
             myFont.drawString((*itr)->aChar, 0, 0);
             ofPopStyle();
@@ -101,12 +96,22 @@ void RotationText::draw() {
             ofPopMatrix();
         }
     }
+    
+    if (showLines) {
+        ofPushMatrix();
+        ofTranslate(ofGetWidth() / 2, ofGetHeight() / 2);
+        ofDrawLine(0, 0, cos(ofDegToRad(startAngle)) * kRadius, sin(ofDegToRad(startAngle)) * kRadius);
+        ofDrawLine(0, 0, cos(ofDegToRad(endAngle)) * kRadius, sin(ofDegToRad(endAngle)) * kRadius);
+        ofPopMatrix();
+    }
 }
 
 void RotationText::addChars(string text) {
-    string tempStr = text;
+    string tempStr = utf8rev(text);
     
+    charsQue.clear();
     string str;
+    
     int bytes = 1;
     int oldBytes = 1;
     
@@ -132,13 +137,13 @@ void RotationText::addChars(string text) {
         //       È†≠„Å®„ÅäÂ∞ª„ÅÆ„Çπ„Éö„Éº„Çπ„ÇíË™øÊï¥„Åô„ÇãÂøÖË¶Å„Åå„ÅÇ„Çã„ÄÇ
         if (oldBytes == 3 && bytes == 1) {
             // ÂâçÂõû„ÅÆÊñáÂ≠ó„Åå„Éû„É´„ÉÅ„Éê„Ç§„Éà„ÅÆÂ†¥Âêà („Éû„É´„ÉÅ„Éê„Ç§„Éà -> ÂçäËßíËã±Êï∞Â≠ó)
-            currentAngle -= kMulti2NumStepAngle;
+            currentAngle += kMulti2NumStepAngle;
         } else if (oldBytes == 1 && bytes == 3) {
             // ÂâçÂõû„ÅÆÊñáÂ≠ó„ÅåÂçäËßíËã±Êï∞Â≠ó„ÅÆÂ†¥Âêà (ÂçäËßíËã±Êï∞Â≠ó -> „Éû„É´„ÉÅ„Éê„Ç§„Éà)
-            currentAngle -= kNum2MultiStepAngle;
+            currentAngle += kNum2MultiStepAngle;
         } else {
             float angle = hasNum ? kNumStepAngle : kMultiStepAngle;
-            currentAngle -= angle;
+            currentAngle += angle;
         }
         
         SingleChar *char1 = new SingleChar(currentAngle, str);
@@ -201,12 +206,35 @@ void RotationText::changeColor(TextSpeechMode mode) {
     }
 }
 
-void RotationText::analyzed(string text[]) {
-    analyzedString = "ÊòéÊó•|Â§©Ê∞ó";
+void RotationText::analyzed(string text) {
+    analyzedString = text;
 //    for (int i = 0; i < text->size(); i++) {
 //        analyzedString += text[i];
 //        if (i != text->size() - 1) analyzedString += "|";
 //    }
     
     changeColor(TextSpeechModeAnalyzed);
+}
+
+std::string RotationText::utf8rev(std::string str) {
+    std::string r;
+    
+    unsigned char lead;
+    int char_size = 0;
+    
+    for (std::string::iterator it = str.begin(); it != str.end(); it += char_size) {
+        lead = *it;
+        
+        if (lead < 0x80) {
+            char_size = 1;
+        } else if (lead < 0xE0) {
+            char_size = 2;
+        } else if (lead < 0xF0) {
+            char_size = 3;
+        } else {
+            char_size = 4;
+        }
+        r.insert(0, str.substr(distance(str.begin(), it), char_size));
+    }
+    return r;
 }

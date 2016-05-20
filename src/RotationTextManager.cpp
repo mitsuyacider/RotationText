@@ -14,6 +14,8 @@ RotationTextManager::RotationTextManager() {
     RotationText *rotTxtB = new RotationText(FieldTypeB);
     rotTextQue.push_back(rotTxtA);
     rotTextQue.push_back(rotTxtB);
+    
+    showLines = false;
 }
 
 RotationTextManager:: ~RotationTextManager() {
@@ -22,17 +24,19 @@ RotationTextManager:: ~RotationTextManager() {
 
 void RotationTextManager::update() {
     for(auto itr = rotTextQue.begin(); itr != rotTextQue.end(); ++itr) {
-        if ((*itr)->textSpeechMode != TextSpeechModeReady) {
-            (*itr)->update();
-        }
+        (*itr)->update();
+//        if ((*itr)->textSpeechMode != TextSpeechModeReady) {
+//            (*itr)->update();
+//        }
     }
 }
 
 void RotationTextManager::draw() {
     for(auto itr = rotTextQue.begin(); itr != rotTextQue.end(); ++itr) {
-        if ((*itr)->textSpeechMode != TextSpeechModeReady) {
-            (*itr)->draw();
-        }
+        (*itr)->draw();
+//        if ((*itr)->textSpeechMode != TextSpeechModeReady) {
+//            (*itr)->draw();
+//        }
     }
 }
 
@@ -56,7 +60,7 @@ bool RotationTextManager::canAddNewText() {
     return false;
 }
 
-void RotationTextManager::analyzed(string text[]) {
+void RotationTextManager::analyzed(string text) {
     RotationText *rotT = rotTextQue.front();
     rotT->analyzed(text);
 //    rotT->changeColor(TextSpeechModeAnalyzed);
