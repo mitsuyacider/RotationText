@@ -55,7 +55,7 @@ class RotationText {
     void update();
     void draw();
     // 文字列を追加する
-    void addChars(string text);
+    void setText(string text);
     // 現在表示されているテキストを取得する
     string getCurrentText();
     // 正規表現でマッチングしたテキスト情報を取得する

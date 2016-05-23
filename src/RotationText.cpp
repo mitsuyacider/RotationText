@@ -37,7 +37,7 @@ void RotationText::setup(string text) {
     
     // String„ÅÆÈÖçÂàó„Çí‰ΩúÊàê„Åô„Çã
     sampleString = "‰ªäÊó•„ÅØ„ÅÑ„ÅÑÂ§©Ê∞ó„Åß„Åó„Åü„ÄÇÊòéÊó•„ÅØ„ÅÑ„ÅÑ„Çπ„Ç±„Ç∏„É•„Éº„É´„ÅßÈÄ≤„ÇÅ„Çã„Å®„ÅÑ„ÅÑ„Åß„Åô„Å≠„ÄÇ";
-    addChars(sampleString);
+    setText(sampleString);
 }
 
 void RotationText::update() {
@@ -105,7 +105,7 @@ void RotationText::draw() {
     }
 }
 
-void RotationText::addChars(string text) {
+void RotationText::setText(string text) {
     string tempStr = utf8rev(text);
     
     charsQue.clear();

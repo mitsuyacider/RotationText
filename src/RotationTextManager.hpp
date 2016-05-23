@@ -20,9 +20,9 @@ public:
     void update();
     void draw();
     // テキストを追加する
-    void addText(string text);
+    void setText(string text);
     // 初期化する (新規テキストを挿入する前にからなず呼ぶ
-    void refresh();
+    void swap();
     // 新規テキストが挿入できるかどうかを調べる
     bool canAddNewText();
     void analyzed(string text);

@@ -40,14 +40,14 @@ void RotationTextManager::draw() {
     }
 }
 
-void RotationTextManager::addText(string text) {
+void RotationTextManager::setText(string text) {
     RotationText *rotT = rotTextQue.front();
-    rotT->addChars(text);
+    rotT->setText(text);
 }
 
-void RotationTextManager::refresh() {
+void RotationTextManager::swap() {
     // NOTE: 領域の入れ替えを行う。
-    swap(rotTextQue[0], rotTextQue[1]);
+    std::swap(rotTextQue[0], rotTextQue[1]);
 }
 
 bool RotationTextManager::canAddNewText() {
