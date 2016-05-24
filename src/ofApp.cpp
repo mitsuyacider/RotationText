@@ -1,12 +1,9 @@
 #include "ofApp.h"
-
+#include "AppSettings.hpp"
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofBackground(0);
     text = "„ÅÇ„ÅÑ„ÅÜ„Åà„Åäabs„ÅÇksldf„Åò„ÇÖ„Åä„ÅÑ";
-    
-    
-    
 }
 
 //--------------------------------------------------------------
@@ -17,6 +14,10 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     rotManager.draw();
+    
+    AppSettings::getInstance();
+//    AppSettings::getInstance().getParam<int>(10);
+    AppSettings::getInstance().getValue("", 1.0); 
 }
 
 //--------------------------------------------------------------
@@ -42,12 +43,16 @@ void ofApp::keyPressed(int key){
             break;
 
         case '5':
+            s = "明日はいい天気になるといいな。スケジュールを";
+            break;
+
+        case '6':
             s = "明日はいい天気になるといいな。スケジュールを確認してTokyoにでも遊びに行こう";
             break;
 
             
         case 's':
-            rotManager.refresh();
+            rotManager.swap();
             newText = true;
             s = "newText";
             break;
@@ -72,13 +77,13 @@ void ofApp::keyPressed(int key){
     if (!analyzed) {
         if(newText) {
             if (rotManager.canAddNewText()) {
-                rotManager.addText(s);
+                rotManager.setText(s);
             } else {
                 printf("\ncan not insert");
             }
             
         } else {
-            rotManager.addText(s);
+            rotManager.setText(s);
         }        
     }
 }

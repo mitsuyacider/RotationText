@@ -24,5 +24,5 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 		
         RotationTextManager rotManager;
-    string text;
+        string text;
 };

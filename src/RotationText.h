@@ -51,7 +51,6 @@ class RotationText {
 
     RotationText(FieldType type);
     ~RotationText();
-    void setup(string text);
     void update();
     void draw();
     // 文字列を追加する

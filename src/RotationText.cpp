@@ -27,19 +27,6 @@ RotationText::~RotationText() {
     
 }
 
-void RotationText::setup(string text) {
-    sampleString = text;
-
-    analyzedList.push_back("„ÅÇ„ÅÑ„ÅÜ„Åà„Åä");
-    analyzedList.push_back("„Åã„Åç„Åè„Åë„Åì");
-    speed = 1;
-
-    
-    // String„ÅÆÈÖçÂàó„Çí‰ΩúÊàê„Åô„Çã
-    sampleString = "‰ªäÊó•„ÅØ„ÅÑ„ÅÑÂ§©Ê∞ó„Åß„Åó„Åü„ÄÇÊòéÊó•„ÅØ„ÅÑ„ÅÑ„Çπ„Ç±„Ç∏„É•„Éº„É´„ÅßÈÄ≤„ÇÅ„Çã„Å®„ÅÑ„ÅÑ„Åß„Åô„Å≠„ÄÇ";
-    setText(sampleString);
-}
-
 void RotationText::update() {
     
     if (!charsQue.empty()) {
@@ -99,8 +86,11 @@ void RotationText::draw() {
     if (showLines) {
         ofPushMatrix();
         ofTranslate(ofGetWidth() / 2, ofGetHeight() / 2);
+        ofPushStyle();
+        ofSetColor(21, 159, 190);
         ofDrawLine(0, 0, cos(ofDegToRad(startAngle)) * kRadius, sin(ofDegToRad(startAngle)) * kRadius);
         ofDrawLine(0, 0, cos(ofDegToRad(endAngle)) * kRadius, sin(ofDegToRad(endAngle)) * kRadius);
+        ofPopStyle();
         ofPopMatrix();
     }
 }

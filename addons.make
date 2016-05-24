@@ -1,1 +1,3 @@
 ofxTrueTypeFontUC
+ofxTween
+ofxXmlSettings
