@@ -14,6 +14,11 @@
 #include "ofxTrueTypeFontUC.h"
 #include "ofMain.h"
 #include "ofxTween.h"
+#include "RotationSettings.hpp"
+
+/**
+ *  This class is for one character
+ */
 
 class SingleChar {
     

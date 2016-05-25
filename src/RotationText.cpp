@@ -9,18 +9,20 @@
 #include "RotationText.h"
 
 RotationText::RotationText(FieldType type) {
-    myFont.loadFont("Meiryo.ttf", kFontSize, true, true);
+    rotSettings = &RotationSettings::getInstance();
+    myFont.loadFont("Meiryo.ttf", rotSettings->fontSize, true, true);
     textSpeechMode = TextSpeechModeReady;
     
+    
     if (type == FieldTypeA) {
-        startAngle = 90 + kMarginAngle;
-        endAngle = 270 - kMarginAngle;
+        startAngle = 90 + rotSettings->fieldMarginAngle;
+        endAngle = 270 - rotSettings->fieldMarginAngle;
     } else if (type == FieldTypeB) {
-        startAngle = 270 + kMarginAngle;
-        endAngle = 450 - kMarginAngle;
+        startAngle = 270 + rotSettings->fieldMarginAngle;
+        endAngle = 450 - rotSettings->fieldMarginAngle;
     }
     
-    showLines = true;
+    showLines = false;
 }
 
 RotationText::~RotationText() {
@@ -57,8 +59,8 @@ void RotationText::update() {
         textSpeechMode = TextSpeechModeReady;
     }
     
-    startAngle += 0.2;
-    endAngle += 0.2;
+    startAngle += rotSettings->speed;
+    endAngle += rotSettings->speed;
 }
 
 void RotationText::draw() {
@@ -68,7 +70,7 @@ void RotationText::draw() {
             ofTranslate(ofGetWidth() / 2,  ofGetHeight() / 2);
             ofRotate((*itr)->angle);
             ofPushMatrix();
-            ofTranslate(kRadius, 0);
+            ofTranslate(rotSettings->radius, 0);
             ofRotate(-90);
             
             ofPushStyle();
@@ -88,8 +90,8 @@ void RotationText::draw() {
         ofTranslate(ofGetWidth() / 2, ofGetHeight() / 2);
         ofPushStyle();
         ofSetColor(21, 159, 190);
-        ofDrawLine(0, 0, cos(ofDegToRad(startAngle)) * kRadius, sin(ofDegToRad(startAngle)) * kRadius);
-        ofDrawLine(0, 0, cos(ofDegToRad(endAngle)) * kRadius, sin(ofDegToRad(endAngle)) * kRadius);
+        ofDrawLine(0, 0, cos(ofDegToRad(startAngle)) * rotSettings->radius, sin(ofDegToRad(startAngle)) * rotSettings->radius);
+        ofDrawLine(0, 0, cos(ofDegToRad(endAngle)) * rotSettings->radius, sin(ofDegToRad(endAngle)) * rotSettings->radius);
         ofPopStyle();
         ofPopMatrix();
     }
@@ -126,12 +128,12 @@ void RotationText::setText(string text) {
         //       È†≠„Å®„ÅäÂ∞ª„ÅÆ„Çπ„Éö„Éº„Çπ„ÇíË™øÊï¥„Åô„ÇãÂøÖË¶Å„Åå„ÅÇ„Çã„ÄÇ
         if (oldBytes == 3 && bytes == 1) {
             // ÂâçÂõû„ÅÆÊñáÂ≠ó„Åå„Éû„É´„ÉÅ„Éê„Ç§„Éà„ÅÆÂ†¥Âêà („Éû„É´„ÉÅ„Éê„Ç§„Éà -> ÂçäËßíËã±Êï∞Â≠ó)
-            currentAngle += kMulti2NumStepAngle;
+            currentAngle += rotSettings->multi2NumStepAngle;
         } else if (oldBytes == 1 && bytes == 3) {
             // ÂâçÂõû„ÅÆÊñáÂ≠ó„ÅåÂçäËßíËã±Êï∞Â≠ó„ÅÆÂ†¥Âêà (ÂçäËßíËã±Êï∞Â≠ó -> „Éû„É´„ÉÅ„Éê„Ç§„Éà)
-            currentAngle += kNum2MultiStepAngle;
+            currentAngle += rotSettings->num2MultiStepAngle;
         } else {
-            float angle = hasNum ? kNumStepAngle : kMultiStepAngle;
+            float angle = hasNum ? rotSettings->numStepAngle : rotSettings->multiStepAngle;
             currentAngle += angle;
         }
         
@@ -184,10 +186,10 @@ void RotationText::changeColor(TextSpeechMode mode) {
             vector<int>::iterator cIter = find( colorPos.begin(),colorPos.end(), bytes);
             
             if( cIter != colorPos.end() ){
-                (*itr)->changeColor(kAnalyzedHilightColor);
+                (*itr)->changeColor(rotSettings->highlightColor);
                 (*itr)->bAnalyzed = true;
             } else {
-                (*itr)->changeColor(kAnalyzedDisableColor);
+                (*itr)->changeColor(rotSettings->disableColor);
                 (*itr)->bAnalyzed = false;
             }
             bytes += (*itr)->bytes;
@@ -197,11 +199,6 @@ void RotationText::changeColor(TextSpeechMode mode) {
 
 void RotationText::analyzed(string text) {
     analyzedString = utf8rev(text);
-//    for (int i = 0; i < text->size(); i++) {
-//        analyzedString += text[i];
-//        if (i != text->size() - 1) analyzedString += "|";
-//    }
-    
     changeColor(TextSpeechModeAnalyzed);
 }
 

@@ -20,8 +20,8 @@ private:
     AppSettings();
     ~AppSettings();
     ofxXmlSettings settings;
-    AppSettings(const AppSettings &x) { printf("\napp settengs **");};
-    AppSettings &operator=(const AppSettings &) { printf("\napp settengs **");return *this; };
+//    AppSettings(const AppSettings &x) { printf("\napp settengs **");};
+//    AppSettings &operator=(const AppSettings &) { printf("\napp settengs **");return *this; };
     
 public:
     static AppSettings &getInstance(void);

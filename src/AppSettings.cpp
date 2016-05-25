@@ -39,3 +39,7 @@ template <> int AppSettings::getValue(const string key, int temp){
 template <> double AppSettings::getValue(const string key, double temp){
     return settings.getValue(key, temp);
 }
+
+template <> float AppSettings::getValue(const string key, float temp){
+    return settings.getValue(key, temp);
+}

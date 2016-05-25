@@ -25,18 +25,12 @@ RotationTextManager:: ~RotationTextManager() {
 void RotationTextManager::update() {
     for(auto itr = rotTextQue.begin(); itr != rotTextQue.end(); ++itr) {
         (*itr)->update();
-//        if ((*itr)->textSpeechMode != TextSpeechModeReady) {
-//            (*itr)->update();
-//        }
     }
 }
 
 void RotationTextManager::draw() {
     for(auto itr = rotTextQue.begin(); itr != rotTextQue.end(); ++itr) {
         (*itr)->draw();
-//        if ((*itr)->textSpeechMode != TextSpeechModeReady) {
-//            (*itr)->draw();
-//        }
     }
 }
 
@@ -63,5 +57,4 @@ bool RotationTextManager::canAddNewText() {
 void RotationTextManager::analyzed(string text) {
     RotationText *rotT = rotTextQue.front();
     rotT->analyzed(text);
-//    rotT->changeColor(TextSpeechModeAnalyzed);
 }

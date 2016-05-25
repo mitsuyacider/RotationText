@@ -17,7 +17,7 @@ void ofApp::draw(){
     
     AppSettings::getInstance();
 //    AppSettings::getInstance().getParam<int>(10);
-    AppSettings::getInstance().getValue("", 1.0); 
+    AppSettings::getInstance().getValue("", 1.0);
 }
 
 //--------------------------------------------------------------
