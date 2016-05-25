@@ -22,8 +22,8 @@ static const float kMulti2NumStepAngle = 5.0; // „Éû„É´„ÉÅ„Éê„
 static const float kRadius = 300.0;
 static const int kFontSize = 20;
 static const int kFieldMarginAngle = 10;
-static const int kHighlightColor = 0xff0000; // ÂΩ¢ÊÖãÁ¥†Ëß£Êûê„Åï„Çå„ÅüÊñáÂ≠ó„ÅÆËâ≤
-static const int kDisableColor = 0x121212; // ÂΩ¢ÊÖãÁ¥†Ëß
+static const string kHighlightColor = "0xff0000"; // ÂΩ¢ÊÖãÁ¥†Ëß£Êûê„Åï„Çå„ÅüÊñáÂ≠ó„ÅÆËâ≤
+static const string kDisableColor = "0x646464"; // ÂΩ¢ÊÖãÁ¥†Ëß
 static const float kRotationSpeed = 0.2;
 static const int kFadeDuration = 2000;
 
@@ -40,8 +40,13 @@ private:
         radius = settings->getValue("TextRotation:Radius", kRadius);
         fontSize = settings->getValue("TextRotation:FontSize", kFontSize);
         fieldMarginAngle = settings->getValue("TextRotation:FieldMarginAngle", kFieldMarginAngle);
-        highlightColor = settings->getValue("TextRotation:HighlightColor", kHighlightColor);
-        disableColor = settings->getValue("TextRotation:DisableColor", kDisableColor);
+        
+        
+        int highlightHex = std::stoi(settings->getValue("TextRotation:HighlightColor", kHighlightColor), nullptr, 16);
+        int disableHex = std::stoi(settings->getValue("TextRotation:DisableColor", kDisableColor), nullptr, 16);
+        highlightColor = highlightHex;
+        disableColor = disableHex;
+        
         fadeDuration = settings->getValue("TextRotation:FadeDuration", kFadeDuration);
     };
     ~RotationSettings() {};

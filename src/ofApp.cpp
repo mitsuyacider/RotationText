@@ -4,6 +4,11 @@
 void ofApp::setup(){
     ofBackground(0);
     text = "„ÅÇ„ÅÑ„ÅÜ„Åà„Åäabs„ÅÇksldf„Åò„ÇÖ„Åä„ÅÑ";
+    
+//    int color = 0xff0000;
+//    int r = (color& 0xff0000) >> 16;
+//    int g = (color& 0xff00) >> 8;
+//    int b = (color& 0xff);
 }
 
 //--------------------------------------------------------------
@@ -15,9 +20,7 @@ void ofApp::update(){
 void ofApp::draw(){
     rotManager.draw();
     
-    AppSettings::getInstance();
-//    AppSettings::getInstance().getParam<int>(10);
-    AppSettings::getInstance().getValue("", 1.0);
+    
 }
 
 //--------------------------------------------------------------

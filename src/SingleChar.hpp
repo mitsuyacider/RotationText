@@ -27,8 +27,11 @@ class SingleChar {
         ~SingleChar();
         void update();
         void draw();
-        void changeColor(ofColor c);
-    
+//        void changeColor(ofColor c);
+        template <typename T> void changeColor(T temp) {
+            printf("\nchangecolor default");
+            return 0;
+        }
         ofxTrueTypeFontUC myFont;
         string aChar;
         float speed;
@@ -44,6 +47,7 @@ class SingleChar {
         ofxTween aTween;
         ofxEasingQuart 	easingquart;
         bool bAnalyzed;
+        int duration;
 };
 
 #endif /* SingleChar_hpp */

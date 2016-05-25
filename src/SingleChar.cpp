@@ -10,6 +10,7 @@
 
 SingleChar::SingleChar(float firstAngle, string txt) {
     speed = RotationSettings::getInstance().speed;
+    duration = RotationSettings::getInstance().fadeDuration;
     aChar = txt;
     angle = firstAngle;
     color = ofColor(255);
@@ -28,9 +29,22 @@ void SingleChar::update() {
 
 void SingleChar::draw() {}
 
-void SingleChar::changeColor(ofColor c) {
-    rTween.setParameters(1, easingquart, ofxTween::easeOut, color.r, c.r, kFadeDuration, 100);
-    gTween.setParameters(1, easingquart, ofxTween::easeOut, color.g, c.g, kFadeDuration, 100);
-    bTween.setParameters(1, easingquart, ofxTween::easeOut, color.b, c.b, kFadeDuration, 100);
-    aTween.setParameters(1, easingquart, ofxTween::easeOut, color.a, c.a, kFadeDuration, 100);
+
+// --------- template -------
+template <> void SingleChar::changeColor(ofColor c){
+    rTween.setParameters(1, easingquart, ofxTween::easeOut, color.r, c.r, duration, 100);
+    gTween.setParameters(1, easingquart, ofxTween::easeOut, color.g, c.g, duration, 100);
+    bTween.setParameters(1, easingquart, ofxTween::easeOut, color.b, c.b, duration, 100);
+    aTween.setParameters(1, easingquart, ofxTween::easeOut, color.a, c.a, duration, 100);
+}
+
+template <> void SingleChar::changeColor(int c){
+    int r = (c& 0xff0000) >> 16;
+    int g = (c& 0xff00) >> 8;
+    int b = (c& 0xff);
+
+    rTween.setParameters(1, easingquart, ofxTween::easeOut, color.r, r, duration, 100);
+    gTween.setParameters(1, easingquart, ofxTween::easeOut, color.g, g, duration, 100);
+    bTween.setParameters(1, easingquart, ofxTween::easeOut, color.b, b, duration, 100);
+    aTween.setParameters(1, easingquart, ofxTween::easeOut, color.a, 255, duration, 100);
 }
