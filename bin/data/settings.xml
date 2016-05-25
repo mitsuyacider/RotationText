@@ -32,6 +32,7 @@
 	<Num2MultiStepAngle>5.8</Num2MultiStepAngle>
 	<NumStepAngle>2.8</NumStepAngle>
 	<Multi2NumStepAngle>5.0</Multi2NumStepAngle>
-	<HilightColor>0xFF0000</HilightColor>
+	<HighlightColor>0xFF0000</HighlightColor>
 	<DisableColor>0xFFFF00</DisableColor>
+	<FadeDuration>0xFFFF00</FadeDuration>
 </TextRotation>
