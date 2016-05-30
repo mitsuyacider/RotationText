@@ -31,14 +31,14 @@ void SingleChar::draw() {}
 
 
 // --------- template -------
-template <> void SingleChar::changeColor(ofColor c){
+void SingleChar::changeColor(ofColor c){
     rTween.setParameters(1, easingquart, ofxTween::easeOut, color.r, c.r, duration, 100);
     gTween.setParameters(1, easingquart, ofxTween::easeOut, color.g, c.g, duration, 100);
     bTween.setParameters(1, easingquart, ofxTween::easeOut, color.b, c.b, duration, 100);
     aTween.setParameters(1, easingquart, ofxTween::easeOut, color.a, c.a, duration, 100);
 }
 
-template <> void SingleChar::changeColor(int c){
+void SingleChar::changeColor(int c){
     int r = (c& 0xff0000) >> 16;
     int g = (c& 0xff00) >> 8;
     int b = (c& 0xff);

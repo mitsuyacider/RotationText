@@ -15,6 +15,12 @@
 /**
  *  This is singleton class for setting up parameters in this app
  */
+
+template <class T> T getValue(const string key, T temp){
+    printf("\ngetParam default");
+    return 0;
+}
+
 class AppSettings {
 private:
     AppSettings();
@@ -26,10 +32,10 @@ private:
 public:
     static AppSettings &getInstance(void);
     
-    template <typename T> T getValue(const string key, T temp){
-        printf("\ngetParam default");
-        return 0;
-    }
+    int getValue(const string key, int temp);
+    double getValue(const string key, double temp);
+    float getValue(const string key, float temp);
+    string getValue(const string key, string temp);
 };
 
 #endif /* AppSettings_hpp */

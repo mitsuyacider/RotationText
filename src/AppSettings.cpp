@@ -32,19 +32,19 @@ AppSettings &AppSettings::getInstance(void) {
 
 // --------- template -------
 // NOTE: the value from xml node is unpredictable value.
-template <> int AppSettings::getValue(const string key, int temp){
+int AppSettings::getValue(const string key, int temp){
     printf("\nkey = %s", key.c_str());
     return settings.getValue(key, temp);
 }
 
-template <> double AppSettings::getValue(const string key, double temp){
+double AppSettings::getValue(const string key, double temp){
     return settings.getValue(key, temp);
 }
 
-template <> float AppSettings::getValue(const string key, float temp){
+float AppSettings::getValue(const string key, float temp){
     return settings.getValue(key, temp);
 }
 
-template <> string AppSettings::getValue(const string key, string temp){
+string AppSettings::getValue(const string key, string temp){
     return settings.getValue(key, temp);
 }

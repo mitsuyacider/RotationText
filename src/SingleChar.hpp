@@ -20,6 +20,10 @@
  *  This class is for one character
  */
 
+template <class T> void changeColor(T temp) {
+    printf("\nchangecolor default");
+    return 0;
+}
 class SingleChar {
     
     public:
@@ -27,11 +31,8 @@ class SingleChar {
         ~SingleChar();
         void update();
         void draw();
-//        void changeColor(ofColor c);
-        template <typename T> void changeColor(T temp) {
-            printf("\nchangecolor default");
-            return 0;
-        }
+        void changeColor(ofColor c);
+        void changeColor(int c);
         ofxTrueTypeFontUC myFont;
         string aChar;
         float speed;

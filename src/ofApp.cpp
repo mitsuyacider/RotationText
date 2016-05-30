@@ -9,8 +9,9 @@ void ofApp::setup(){
 //    int r = (color& 0xff0000) >> 16;
 //    int g = (color& 0xff00) >> 8;
 //    int b = (color& 0xff);
+    
+    AppSettings *settings = &AppSettings::getInstance();
 }
-
 //--------------------------------------------------------------
 void ofApp::update(){
     rotManager.update();
