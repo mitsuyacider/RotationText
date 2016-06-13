@@ -7,6 +7,7 @@
 //
 
 #include "RotationText.h"
+#include <regex>
 
 RotationText::RotationText(FieldType type) {
     rotSettings = &RotationSettings::getInstance();
@@ -103,8 +104,8 @@ void RotationText::setText(string text) {
     charsQue.clear();
     string str;
     
-    int bytes = 1;
-    int oldBytes = 1;
+    bool bAlphanumeric = false;
+    bool bOldAlphanumeric = false;
     
     float currentAngle = 0.0;
     if (charsQue.empty()) {
@@ -113,35 +114,35 @@ void RotationText::setText(string text) {
     } else {
         SingleChar *lastChar = charsQue.back();
         bool hasNum = isalnum(*lastChar->aChar.c_str());
-        oldBytes = hasNum ? 1 : 3;
+        bOldAlphanumeric = lastChar->alphanumeric;
         currentAngle = lastChar->angle;
     }
-    
+
+    // NOTE: arrange the reading bytes. the bytes is always multi byte
+    //       we should devide the alphanumeric and japanese char with using
+    //       regular expression.
+    //       the regular expression target is Ａ-Ｚ １-９ ａ-ｚ
+    //       when we used Ａ-Ｚ ０-９ ａ-ｚ for dividing small alphabet, OS could not divide 'あ' and 'a'
+    std::regex re("^[０１２３４５６７８９ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ]+$");
     while(!tempStr.empty()) {
-        // √Ç√ß√§√ã√ü√≠√ã√£¬±√ä√Ø‚àû√Ç‚â†√≥‚Äû√Ö√£‚Äû√Ö¬©‚Äû√Ö√ú‚Äû√Ö√£‚Äû√á√≠√Ç√†¬ß√Ç√†‚Ä¢‚Äû√Ö√¥‚Äû√á√£
         bool hasNum = isalnum(*tempStr.substr(0, 1).c_str());
         
-        bytes = hasNum ? 1 : 3;
-        str = tempStr.substr(0, bytes);
-        
-        // NOTE: ÂçäËßíËã±Êï∞Â≠ó„Å®„Éû„É´„ÉÅ„Éê„Ç§„ÉàÊñáÂ≠ó„ÅÆÂ§â„Çè„ÇäÁõÆ„Å´„Çπ„Éö„Éº„Çπ„ÅåÁ©∫„Åç„Åô„Åé„Å¶„Åó„Åæ„ÅÜ„Åü„ÇÅ„ÄÅ
-        //       È†≠„Å®„ÅäÂ∞ª„ÅÆ„Çπ„Éö„Éº„Çπ„ÇíË™øÊï¥„Åô„ÇãÂøÖË¶Å„Åå„ÅÇ„Çã„ÄÇ
-        if (oldBytes == 3 && bytes == 1) {
-            // ÂâçÂõû„ÅÆÊñáÂ≠ó„Åå„Éû„É´„ÉÅ„Éê„Ç§„Éà„ÅÆÂ†¥Âêà („Éû„É´„ÉÅ„Éê„Ç§„Éà -> ÂçäËßíËã±Êï∞Â≠ó)
+        str = tempStr.substr(0, kCharBytes);
+        bAlphanumeric = std::regex_match(str, re) ;
+        if (!bOldAlphanumeric && bAlphanumeric) {
             currentAngle += rotSettings->multi2NumStepAngle;
-        } else if (oldBytes == 1 && bytes == 3) {
-            // ÂâçÂõû„ÅÆÊñáÂ≠ó„ÅåÂçäËßíËã±Êï∞Â≠ó„ÅÆÂ†¥Âêà (ÂçäËßíËã±Êï∞Â≠ó -> „Éû„É´„ÉÅ„Éê„Ç§„Éà)
+        } else if (bOldAlphanumeric && !bAlphanumeric) {
             currentAngle += rotSettings->num2MultiStepAngle;
         } else {
-            float angle = hasNum ? rotSettings->numStepAngle : rotSettings->multiStepAngle;
+            float angle = bAlphanumeric ? rotSettings->numStepAngle : rotSettings->multiStepAngle;
             currentAngle += angle;
         }
         
         SingleChar *char1 = new SingleChar(currentAngle, str);
         charsQue.push_back(char1);
-        
-        tempStr.erase(0, bytes);
-        oldBytes = bytes;
+        char1->alphanumeric = bAlphanumeric;
+        tempStr.erase(0, kCharBytes);
+        bOldAlphanumeric = bAlphanumeric;
     }
     
     textSpeechMode = TextSpeechModeSpeaking;
@@ -192,7 +193,7 @@ void RotationText::changeColor(TextSpeechMode mode) {
                 (*itr)->changeColor(rotSettings->disableColor);
                 (*itr)->bAnalyzed = false;
             }
-            bytes += (*itr)->bytes;
+            bytes += kCharBytes;
         }
     }
 }

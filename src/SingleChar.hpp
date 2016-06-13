@@ -49,6 +49,7 @@ class SingleChar {
         ofxEasingQuart 	easingquart;
         bool bAnalyzed;
         int duration;
+        bool alphanumeric;
 };
 
 #endif /* SingleChar_hpp */

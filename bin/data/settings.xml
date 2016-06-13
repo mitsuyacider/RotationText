@@ -28,10 +28,10 @@
 	<FontSize>20</FontSize>
 	<FieldMarginAngle>10</FieldMarginAngle>
 	<Radius>300.0</Radius>
-	<MultiStepAngle>4.8</MultiStepAngle>
-	<Num2MultiStepAngle>5.8</Num2MultiStepAngle>
-	<NumStepAngle>2.8</NumStepAngle>
-	<Multi2NumStepAngle>5.0</Multi2NumStepAngle>
+	<MultiStepAngle>5.8</MultiStepAngle>
+	<Num2MultiStepAngle>4.8</Num2MultiStepAngle>
+	<NumStepAngle>3.2</NumStepAngle>
+	<Multi2NumStepAngle>5.5</Multi2NumStepAngle>
 	<HighlightColor>0xFF0000</HighlightColor>
 	<DisableColor>0x646464</DisableColor>
 	<FadeDuration>2000</FadeDuration>
