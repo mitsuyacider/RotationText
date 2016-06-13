@@ -26,6 +26,11 @@ static const string kHighlightColor = "0xff0000"; // ÂΩ¢ÊÖãÁ¥†Ëß£Ê
 static const string kDisableColor = "0x646464"; // ÂΩ¢ÊÖãÁ¥†Ëß
 static const float kRotationSpeed = 0.2;
 static const int kFadeDuration = 2000;
+static const string kOutlineColor = "0xff0000";
+static const string kOutlineHighlightColor = "0xff0000";
+static const string kOutlineDisableColor = "0x646464";
+
+static const float kOutlineWidth = 1.0;
 
 class RotationSettings {
 private:
@@ -44,9 +49,16 @@ private:
         
         int highlightHex = std::stoi(settings->getValue("TextRotation:HighlightColor", kHighlightColor), nullptr, 16);
         int disableHex = std::stoi(settings->getValue("TextRotation:DisableColor", kDisableColor), nullptr, 16);
+        int outlineHex = std::stoi(settings->getValue("TextRotation:OutlineColor", kOutlineColor), nullptr, 16);
+        int outlineHighlightHex = std::stoi(settings->getValue("TextRotation:OutlineHighlightColor", kOutlineHighlightColor), nullptr, 16);
+        int outlineDisableHex = std::stoi(settings->getValue("TextRotation:OutlineDisableColor", kOutlineDisableColor), nullptr, 16);
         highlightColor = highlightHex;
         disableColor = disableHex;
+        outlineColor = outlineHex;
+        outlineHighlightColor = outlineHighlightHex;
+        outlineDisableColor = outlineDisableHex;
         
+        outlineWidth = kOutlineWidth;
         fadeDuration = settings->getValue("TextRotation:FadeDuration", kFadeDuration);
     };
     ~RotationSettings() {};
@@ -66,8 +78,12 @@ public:
     float radius;
     float fontSize;
     float fieldMarginAngle;
+    float outlineWidth;
     int highlightColor;
     int disableColor;
     int fadeDuration;
+    int outlineColor;
+    int outlineHighlightColor;
+    int outlineDisableColor;
 };
 #endif /* RotationSettings_hpp */

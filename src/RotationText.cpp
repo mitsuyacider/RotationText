@@ -75,12 +75,22 @@ void RotationText::draw() {
             ofRotate(-90);
             
             ofPushStyle();
-            if ((*itr)->angle > startAngle && (*itr)->angle < endAngle) {
-                ofSetColor((*itr)->color);
-            }
+            ofPushMatrix();
+            // NOTE: we should move the anchor point because the path start point is difference.
+            ofTranslate(0, kCharBytes);
             
-            myFont.drawString((*itr)->aChar, 0, 0);
+            // draw font with outline. if we use the same color at outline and inside, the lools is bold font.
+            vector<ofPath> paths = myFont.getStringAsPoints((*itr)->aChar);
+            for (auto itr2 = paths.begin(); itr2 != paths.end(); ++itr2) {
+                ofPath path = (*itr2);
+                path.setStrokeColor((*itr)->outlineColor);
+                path.setStrokeWidth(rotSettings->outlineWidth);
+                path.setFillColor((*itr)->color);
+                path.draw();
+            }
+            ofPopMatrix();
             ofPopStyle();
+            
             ofPopMatrix();
             ofPopMatrix();
         }
@@ -109,7 +119,6 @@ void RotationText::setText(string text) {
     
     float currentAngle = 0.0;
     if (charsQue.empty()) {
-        // NOTE: AÈ†òÂüü, BÈ†òÂüü„Åß„ÄÅÁèæÂú®ÊèèÁîª„Åß„Åç„ÇãÈ†òÂüü„Çí„Åø„ÇãÂøÖË¶Å„Åå„ÅÇ„Çã„ÄÇ
         currentAngle = startAngle;
     } else {
         SingleChar *lastChar = charsQue.back();
@@ -122,7 +131,7 @@ void RotationText::setText(string text) {
     //       we should devide the alphanumeric and japanese char with using
     //       regular expression.
     //       the regular expression target is Ａ-Ｚ １-９ ａ-ｚ
-    //       when we used Ａ-Ｚ ０-９ ａ-ｚ for dividing small alphabet, OS could not divide 'あ' and 'a'
+    //       Although we used A-Z a-z 0-9 for dividing alphanumeric, OS could not divide 'あ' and 'a'
     std::regex re("^[０１２３４５６７８９ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ]+$");
     while(!tempStr.empty()) {
         bool hasNum = isalnum(*tempStr.substr(0, 1).c_str());
@@ -188,11 +197,14 @@ void RotationText::changeColor(TextSpeechMode mode) {
             
             if( cIter != colorPos.end() ){
                 (*itr)->changeColor(rotSettings->highlightColor);
+                (*itr)->changeOutlineColor(rotSettings->outlineHighlightColor);
                 (*itr)->bAnalyzed = true;
             } else {
                 (*itr)->changeColor(rotSettings->disableColor);
+                (*itr)->changeOutlineColor(rotSettings->outlineDisableColor);
                 (*itr)->bAnalyzed = false;
             }
+            
             bytes += kCharBytes;
         }
     }

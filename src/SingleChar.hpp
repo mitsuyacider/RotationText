@@ -33,19 +33,27 @@ class SingleChar {
         void draw();
         void changeColor(ofColor c);
         void changeColor(int c);
+        void changeOutlineColor(int c);
+    
         ofxTrueTypeFontUC myFont;
         string aChar;
         float speed;
         float angle;
         float radius;
         ofColor color;
+        ofColor outlineColor;
         float deadAngle;
-        int bytes;
     
         ofxTween rTween;
         ofxTween gTween;
         ofxTween bTween;
         ofxTween aTween;
+    
+        ofxTween oRTween;
+        ofxTween oGTween;
+        ofxTween oBTween;
+        ofxTween oATween;
+    
         ofxEasingQuart 	easingquart;
         bool bAnalyzed;
         int duration;

@@ -82,7 +82,7 @@ void ofApp::keyPressed(int key){
             
         case'b': {
             analyzed = true;
-            string s = "ÊòéÊó•|Êô¥„Çå„Çã|Â§©Ê∞ó|„Çπ„Ç±„Ç∏„É•„Éº„É´";
+            string s = "ｏｂｊｅｃｔｉｖｅｃ";
             rotManager.analyzed(s);
         }
             break;

@@ -14,8 +14,7 @@ SingleChar::SingleChar(float firstAngle, string txt) {
     aChar = txt;
     angle = firstAngle;
     color = ofColor(255);
-    bool hasNum = isalnum(*txt.substr(0, 1).c_str());    
-    bytes = hasNum ? 1 : 3;
+    outlineColor.setHex(RotationSettings::getInstance().outlineColor);
 }
 
 SingleChar::~SingleChar() {}
@@ -24,6 +23,7 @@ void SingleChar::update() {
     angle += speed;
     if (!rTween.isCompleted()) {
         color = ofColor(rTween.update(), gTween.update(), bTween.update(), aTween.update());
+        outlineColor = ofColor(oRTween.update(), oGTween.update(), oBTween.update(), oATween.update());
     }
 }
 
@@ -47,4 +47,16 @@ void SingleChar::changeColor(int c){
     gTween.setParameters(1, easingquart, ofxTween::easeOut, color.g, g, duration, 100);
     bTween.setParameters(1, easingquart, ofxTween::easeOut, color.b, b, duration, 100);
     aTween.setParameters(1, easingquart, ofxTween::easeOut, color.a, 255, duration, 100);
+}
+
+void SingleChar::changeOutlineColor(int c) {
+    int r = (c& 0xff0000) >> 16;
+    int g = (c& 0xff00) >> 8;
+    int b = (c& 0xff);
+    
+    oRTween.setParameters(1, easingquart, ofxTween::easeOut, outlineColor.r, r, duration, 100);
+    oGTween.setParameters(1, easingquart, ofxTween::easeOut, outlineColor.g, g, duration, 100);
+    oBTween.setParameters(1, easingquart, ofxTween::easeOut, outlineColor.b, b, duration, 100);
+    oATween.setParameters(1, easingquart, ofxTween::easeOut, outlineColor.a, 255, duration, 100);
+    
 }
