@@ -58,6 +58,11 @@ class SingleChar {
         bool bAnalyzed;
         int duration;
         bool alphanumeric;
+    
+    ofFbo fbo;
+    ofFbo fboD;
+    ofShader shader;
+    bool useShader;
 };
 
 #endif /* SingleChar_hpp */

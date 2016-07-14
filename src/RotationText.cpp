@@ -11,7 +11,7 @@
 
 RotationText::RotationText(FieldType type) {
     rotSettings = &RotationSettings::getInstance();
-    myFont.loadFont("Meiryo.ttf", rotSettings->fontSize, true, true);
+    myFont.loadFont("ヒラギノ角ゴシック W7.ttc", rotSettings->fontSize, true, true);
     textSpeechMode = TextSpeechModeReady;
     
     
@@ -33,7 +33,7 @@ RotationText::~RotationText() {
 void RotationText::update() {
     
     if (!charsQue.empty()) {
-        // MEMO: auto„ÅØÂûãÊé®Ë´ñ„Çâ„Åó„ÅÑ
+        // MEMO: auto‚Äû√Ö√ò√Ç√ª√£√ä√©¬Æ√ã¬¥√±‚Äû√á√¢‚Äû√Ö√≥‚Äû√Ö√ë
         float lastAngle = 0.0;
         for(auto itr = charsQue.begin(); itr != charsQue.end(); ++itr) {
             if (textSpeechMode == TextSpeechModeAnalyzed) {
@@ -79,15 +79,20 @@ void RotationText::draw() {
             // NOTE: we should move the anchor point because the path start point is difference.
             ofTranslate(0, kCharBytes);
             
-            // draw font with outline. if we use the same color at outline and inside, the lools is bold font.
-            vector<ofPath> paths = myFont.getStringAsPoints((*itr)->aChar);
-            for (auto itr2 = paths.begin(); itr2 != paths.end(); ++itr2) {
-                ofPath path = (*itr2);
-                path.setStrokeColor((*itr)->outlineColor);
-                path.setStrokeWidth(rotSettings->outlineWidth);
-                path.setFillColor((*itr)->color);
-                path.draw();
+            if ((*itr)->useShader) {
+                (*itr)->draw();
+            } else {
+                // draw font with outline. if we use the same color at outline and inside, the lools is bold font.
+                vector<ofPath> paths = myFont.getStringAsPoints((*itr)->aChar);
+                for (auto itr2 = paths.begin(); itr2 != paths.end(); ++itr2) {
+                    ofPath path = (*itr2);
+                    path.setStrokeColor((*itr)->outlineColor);
+                    path.setStrokeWidth(rotSettings->outlineWidth);
+                    path.setFillColor((*itr)->color);
+                    path.draw();
+                }
             }
+            
             ofPopMatrix();
             ofPopStyle();
             
@@ -130,9 +135,9 @@ void RotationText::setText(string text) {
     // NOTE: arrange the reading bytes. the bytes is always multi byte
     //       we should devide the alphanumeric and japanese char with using
     //       regular expression.
-    //       the regular expression target is Ａ-Ｚ １-９ ａ-ｚ
-    //       Although we used A-Z a-z 0-9 for dividing alphanumeric, OS could not divide 'あ' and 'a'
-    std::regex re("^[０１２３４５６７８９ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ]+$");
+    //       the regular expression target is Ôº°-Ôº∫ Ôºë-Ôºô ÔΩÅ-ÔΩö
+    //       Although we used A-Z a-z 0-9 for dividing alphanumeric, OS could not divide '„ÅÇ' and 'a'
+    std::regex re("^[ÔºêÔºëÔºíÔºìÔºîÔºïÔºñÔºóÔºòÔºôÔº°Ôº¢Ôº£Ôº§Ôº•Ôº¶ÔºßÔº®Ôº©Ôº™Ôº´Ôº¨Ôº≠ÔºÆÔºØÔº∞Ôº±Ôº≤Ôº≥Ôº¥ÔºµÔº∂Ôº∑Ôº∏ÔºπÔº∫ÔΩÅÔΩÇÔΩÉÔΩÑÔΩÖÔΩÜÔΩáÔΩàÔΩâÔΩäÔΩãÔΩåÔΩçÔΩéÔΩèÔΩêÔΩëÔΩíÔΩìÔΩîÔΩïÔΩñÔΩóÔΩòÔΩôÔΩö]+$");
     while(!tempStr.empty()) {
         bool hasNum = isalnum(*tempStr.substr(0, 1).c_str());
         
@@ -184,7 +189,7 @@ std::vector<int> RotationText::search( std::string const & text, std::regex cons
 void RotationText::changeColor(TextSpeechMode mode) {
     textSpeechMode = mode;
     
-    // Ëâ≤„ÇíÂ§âÊõ¥„Åô„Çã
+    // √ã√¢‚â§‚Äû√á√≠√Ç¬ß√¢√ä√µ¬•‚Äû√Ö√¥‚Äû√á√£
     if (mode == TextSpeechModeAnalyzed) {
         string tempStr = getCurrentText();
         //        vector colorPos =
