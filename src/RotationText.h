@@ -66,4 +66,11 @@ class RotationText {
         float endAngle;
         string analyzedString;
         RotationSettings *rotSettings;
+    
+    ofFbo fbo;
+    ofFbo fboD;
+    ofShader shader;
+    bool useShader;
+    ofxTrueTypeFontUC myFontB;
+  
 };

@@ -24,6 +24,20 @@ RotationText::RotationText(FieldType type) {
     }
     
     showLines = false;
+    
+    
+    
+    
+    int offset = 10;
+    int size = RotationSettings::getInstance().fontSize;
+    fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA, 4);
+    fboD.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA, 4);
+    shader.load("outlineShader/outlineShader");
+    myFontB.load("ヒラギノ角ゴシック W7.ttc", size, true, true);
+    
+    // if you want use shader for drawing outline, should turn on following flag
+    useShader = true;
+
 }
 
 RotationText::~RotationText() {
@@ -66,6 +80,12 @@ void RotationText::update() {
 
 void RotationText::draw() {
     if (!charsQue.empty())  {
+        
+        if (useShader) {
+            fbo.begin();
+            ofClear(0,0,0,0);
+        }
+
         for(auto itr = charsQue.begin(); itr != charsQue.end(); ++itr) {
             ofPushMatrix();
             ofTranslate(ofGetWidth() / 2,  ofGetHeight() / 2);
@@ -79,8 +99,10 @@ void RotationText::draw() {
             // NOTE: we should move the anchor point because the path start point is difference.
             ofTranslate(0, kCharBytes);
             
-            if ((*itr)->useShader) {
-                (*itr)->draw();
+            if (useShader) {
+                // NOTE: update shader for drawing outline
+                ofSetColor((*itr)->color);
+                myFont.drawString((*itr)->aChar, 0, RotationSettings::getInstance().fontSize + 4);
             } else {
                 // draw font with outline. if we use the same color at outline and inside, the lools is bold font.
                 vector<ofPath> paths = myFont.getStringAsPoints((*itr)->aChar);
@@ -98,6 +120,22 @@ void RotationText::draw() {
             
             ofPopMatrix();
             ofPopMatrix();
+        }
+        
+        if (useShader) {
+            fbo.end();
+            
+            fboD.begin();
+            ofClear(0,0,0,0);
+            shader.begin();
+            shader.setUniform1f("u_offset", 2.0f);
+            shader.setUniform3f("u_color", 255.0 / 255.0, 0.0 / 255.0, 0.0 / 255.0);
+            fbo.draw(0,0);
+            shader.end();
+            fbo.draw(0,0);
+            fboD.end();
+            
+            fboD.draw(0, 0);
         }
     }
     

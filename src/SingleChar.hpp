@@ -35,7 +35,6 @@ class SingleChar {
         void changeColor(int c);
         void changeOutlineColor(int c);
     
-        ofxTrueTypeFontUC myFont;
         string aChar;
         float speed;
         float angle;
@@ -58,11 +57,6 @@ class SingleChar {
         bool bAnalyzed;
         int duration;
         bool alphanumeric;
-    
-    ofFbo fbo;
-    ofFbo fboD;
-    ofShader shader;
-    bool useShader;
 };
 
 #endif /* SingleChar_hpp */
